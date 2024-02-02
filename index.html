@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="navbar">
+    <div class="title">
+      <a href="index.html">THE ARTISTS API</a>
+    </div>
+    <form action="/search" method="GET">
+      <input type="text" id="search" name="search" placeholder="Name of The Artist">
+      <button type="submit">Search</button>
+    </form>
+  </div>
+  {{ if .SearchTerm }}
+    {{ range $id, $info := .FilteredArtists }}
+      <div class="cardsearch">
+        <div class="part1">
+          <div class="name">
+            <h2>{{ $info.Name }}</h2>
+          </div>
+          <div class="cadreimage">
+            <img src="{{ $info.Image }}" class="image" alt="img">
+          </div>
+        </div>
+        <div class="part2">
+          <div class="members">
+            <h3>Members:</h3>
+            {{ range $info.Members }}
+              <p class="member-item">{{ . }}</p>
+            {{ end }}
+          </div>
+          <div class="apidate">
+            <h3>Creation Date:</h3>
+            <h3 class="sapitext">{{ $info.CreationDate }}</h3>
+          </div>
+          <div class="apialbum">
+            <h3>First album:</h3> 
+            <h3 class="sapialbum">{{ $info.FirstAlbum }}</h3>
+          </div>
+          <div class="apidates">
+            <h3>Concerts dates:</h3>
+            {{ range $key, $value := $info.DatesLocations }}
+              <li class ="dates-items">{{ $key }}: {{ range $date := $value }}{{ $date }} {{ end }}</li>
+            {{ end }}
+          </div>
+        </div>
+      </div>
+    {{ end }}
+  {{ else }}
+    <div class="cardhome">
+      {{ range $id, $info := .FilteredArtists }}
+        <div class="cadreimagehome">
+          <img src="{{ $info.Image }}" class="imagehome" alt="img">
+        </div>
+      {{ end }}
+    </div>
+
+
+    {{ if not .FilteredArtists }}
+      <div class="carderror">
+        <p class="message-error">Aucun résultat trouvé pour '{{.SearchTerm}}'.</p>
+        <img src="/static/error-404-found-glitch-effect_8024-4.avif" class="error-image">
+      </div>
+    {{ end }}
+  {{ end }}
+
+  <script src="/static/mais.js"></script>
+</body>
+</html>
